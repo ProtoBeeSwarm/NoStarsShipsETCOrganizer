@@ -77,7 +77,7 @@ public class Helper extends Main {
         System.out.println("""
                 Enter parameters in format:
                 name, craft class, size, nation
-                name, craftClass, size (nation imported from existing craft class)""");
+                name, craft class, size (nation imported from existing craft class)""");
         tempHolder = scanner.nextLine();
         holderArray = tempHolder.split(", ");
         if(holderArray.length == 4) {
@@ -168,11 +168,26 @@ public class Helper extends Main {
         for (int i = 0; i < ships.size(); i++) {
             if (ships.get(i).equals(shipHolder)) {
                 ships.remove(i);
-                System.out.println("Ship removed.");
+                System.out.println("Ship removed:\n" + shipHolder.toString());
                 return;
             }
         }
         System.out.println("Ship does not exist.");
+    }
+
+    public static void removeSquadron() {
+        System.out.println("Squadron to remove in format:\nname, craft class, size, nation");
+        tempHolder = scanner.nextLine();
+        holderArray = tempHolder.split(", ");
+        squadronHolder = new Squadron(holderArray[0], holderArray[1], Integer.parseInt(holderArray[2]), holderArray[3]);
+        for(int i = 0; i < squadrons.size(); i++) {
+            if(squadrons.get(i).equals(squadronHolder)) {
+                squadrons.remove(i);
+                System.out.println("Squadron removed:\n" + squadronHolder.toString());
+                return;
+            }
+        }
+        System.out.println("Squadron does not exist.");
     }
 
     public static void removeClass() {
@@ -183,7 +198,7 @@ public class Helper extends Main {
         for (int i = 0; i < classes.size(); i++) {
             if (classes.get(i).equals(classHolder)) {
                 classes.remove(i);
-                System.out.println("Class removed.");
+                System.out.println("Class removed:\n" + classHolder.toString());
                 return;
             }
         }
@@ -197,7 +212,7 @@ public class Helper extends Main {
         for (int i = 0; i < fleets.size(); i++) {
             if (fleets.get(i).getName().equals(holderArray[0]) && fleets.get(i).getNation().equals(holderArray[1])) {
                 fleets.remove(i);
-                System.out.println("Fleet removed.");
+                System.out.println("Fleet removed:\n" + fleetHolder.toStringNoComp());
                 return;
             }
         }
@@ -216,7 +231,7 @@ public class Helper extends Main {
             shipHolder = new Ship(holderArray[0], holderArray[1], Integer.parseInt(holderArray[2]), holderArray[3]);
         } else if (holderArray.length == 3) {
             for (int i = 0; i < classes.size(); i++) {
-                if (classes.get(i).getName().equals(tempHolder)) {
+                if (classes.get(i).getName().equals(holderArray[1])) {
                     shipHolder = new Ship(holderArray[0], holderArray[1], classes.get(i).getMeterage(), holderArray[2]);
                 }
             }
@@ -239,7 +254,37 @@ public class Helper extends Main {
                 return ships.get(i);
             }
         }
-        System.out.println("Ship does not exist");
+        System.out.println("Ship does not exist,");
+        return null;
+    }
+
+    public static Squadron locateSquadron() {
+        System.out.println("""
+                Enter parameters in format:
+                name, craft class, size, nation
+                name, craft class, size (nation imported from existing craft class)""");
+        tempHolder = scanner.nextLine();
+        holderArray = tempHolder.split(", ");
+        if(holderArray.length == 4) {
+            squadronHolder =  new Squadron(holderArray[0], holderArray[1], Integer.parseInt(holderArray[2]), holderArray[3]);
+        } else if(holderArray.length == 3) {
+            for(int i = 0; i < squadrons.size(); i++) {
+                if(squadrons.get(i).getCraftClass().equals(holderArray[1])) {
+                    squadronHolder = new Squadron(holderArray[0], holderArray[1], Integer.parseInt(holderArray[2]), squadrons.get(i).getNation());
+                }
+            }
+            System.out.println("Craft class does not exist.");
+            return null;
+        } else {
+            System.out.println("Invalid entry.");
+            return null;
+        }
+        for(int i = 0; i < squadrons.size(); i++) {
+            if(squadrons.get(i).equals(squadronHolder)) {
+                return squadrons.get(i);
+            }
+        }
+        System.out.println("Squadron does not exist.");
         return null;
     }
 
@@ -289,8 +334,7 @@ public class Helper extends Main {
         for (int i = 0; i < ships.size(); i++) {
             tempHolder_temp.append("\n").append(ships.get(i).toString());
         }
-        tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all ships:" + tempHolder);
+        System.out.println("Listing all ships:" + tempHolder_temp.toString());
     }
 
     public static void listShipsClass() {
@@ -306,8 +350,7 @@ public class Helper extends Main {
                 }
             }
         }
-        tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all ships of class:" + tempHolder);
+        System.out.println("Listing all ships of class " + tempHolder + ":\n" + tempHolder_temp.toString());
     }
 
     public static void listShipsNation() {
@@ -319,8 +362,7 @@ public class Helper extends Main {
                 tempHolder_temp.append("\n").append(ships.get(i).toString());
             }
         }
-        tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all ships of nation:" + tempHolder);
+        System.out.println("Listing all ships of nation " + tempHolder + ":\n" + tempHolder_temp.toString());
     }
 
     public static void listShipsMeterage() {
@@ -332,8 +374,51 @@ public class Helper extends Main {
                 tempHolder_temp.append("\n").append(ships.get(i).toString());
             }
         }
-        tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all ships of meterage:" + tempHolder);
+        System.out.println("Listing all ships of meterage " + tempHolder + ":\n" + tempHolder_temp.toString());
+    }
+
+    public static void listSquadrons() {
+        StringBuilder tempHolder_temp = new StringBuilder();
+        for(int i = 0; i < squadrons.size(); i++) {
+            tempHolder_temp.append("\n").append(squadrons.get(i).toString());
+        }
+        System.out.println("Listing all squadrons:" + tempHolder_temp.toString());
+    }
+
+    public static void listSquadronsClass() {
+        System.out.println("Craft class to list all squadrons of:");
+        tempHolder = scanner.nextLine();
+        StringBuilder tempHolder_temp = new StringBuilder();
+        for(int i = 0; i < squadrons.size(); i++) {
+            if(squadrons.get(i).getCraftClass().equals(tempHolder)) {
+                tempHoler_temp.append("\n").append(squadrons.get(i).toString())
+            }
+        }
+        System.out.println("Listing all squadrons of craft class " + tempHolder + ":\n" + tempHolder_temp.toString());
+    }
+
+    public static void listSquadronsNation() {
+        System.out.println("Nation to list all squadrons of:");
+        tempHolder = scanner.nextLine();
+        StringBuilder tempHolder_temp = new StringBuilder();
+        for(int i = 0; i < squadrons.size(); i++) {
+            if(squadrons.get(i).getNation().equals(tempHolder)) {
+                tempHolder_temp.append("\n").append(squadrons.get(i).toString());
+            }
+        }
+        System.out.println("Listing all squadrons of nation " + tempHolder + ":\n" + tempHolder_temp.toString());
+    }
+
+    public static void listSquadronsSize() {
+        System.out.println("Size to list all squadrons of:");
+        tempHolder = scanner.nextLine();
+        StringBuilder tempHolder_temp = new StringBuilder();
+        for(int i = 0; i < squadrons.size(); i++) {
+            if(squadrons.get(i).getSize() == Integer.parseInt(tempHolder)) {
+                tempHolder_temp.append("\n").append(squadrons.get(i).toString());
+            }
+        }
+        System.out.println("Listing all squadrons of size " + tempHolder + ":\n" + tempHolder_temp.toString());
     }
 
     public static void listClasses() {
@@ -354,8 +439,7 @@ public class Helper extends Main {
                 tempHolder_temp.append("\n").append(classes.get(i).toString());
             }
         }
-        tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all classes of nation:" + tempHolder);
+        System.out.println("Listing all classes of nation" + tempHolder + ":\n" + tempHolder_temp.toString());
     }
 
     public static void listClassesMeterage() {
@@ -367,8 +451,7 @@ public class Helper extends Main {
                 tempHolder_temp.append("\n").append(classes.get(i).toString());
             }
         }
-        tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all classes of meterage:" + tempHolder);
+        System.out.println("Listing all classes of meterage " + tempHolder + ":\n" + tempHolder_temp.toString());
     }
 
     public static void listFleets() {
@@ -376,8 +459,7 @@ public class Helper extends Main {
         for (int i = 0; i < fleets.size(); i++) {
             tempHolder_temp.append("\n").append(fleets.get(i).toStringNoComp());
         }
-        tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all ships:" + tempHolder);
+        System.out.println("Listing all fleets:" + tempHolder_temp.toString());
     }
 
     public static void listFleetsNation() {
@@ -389,8 +471,7 @@ public class Helper extends Main {
                 tempHolder_temp.append("\n").append(fleets.get(i).toStringNoComp());
             }
         }
-        tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all fleets of nation:" + tempHolder);
+        System.out.println("Listing all fleets of nation " + tempHolder + ":\n" + tempHolder_temp.toString());
     }
 
     public static void listFleetsSize() {
@@ -403,7 +484,7 @@ public class Helper extends Main {
             }
         }
         tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all fleets of size:" + tempHolder);
+        System.out.println("Listing all fleets of size " + tempHolder + ":\n" + tempHolder_temp.toString());
     }
 
     public static void addToFleet() {

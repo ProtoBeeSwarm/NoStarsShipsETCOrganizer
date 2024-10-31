@@ -33,7 +33,6 @@ public class Main {
                         import -- Imports existing ships, squadrons, classes, and fleets from specific files
                         export -- saves current ships, squadrons, classes, and fleets to a file
                         exit -- quit program""");
-                default -> System.out.println("Invalid command.");
                 case "exit" -> System.exit(0);
                 case "new" -> {
                     System.out.println("Create a new (ship, class, fleet):");
@@ -74,10 +73,11 @@ public class Main {
                     switch(scanner.nextLine()) {
                         default -> System.out.println("Invalid entry.");
                         case "ship" -> { Helper.removeShip(); }
+                        case "squadron" -> { Helper.removeSquadron(); }
                         case "class" -> { Helper.removeClass(); }
                         case "fleet" -> { Helper.removeFleet(); }
                     }
-                } // TODO: IMPLEMENT SQUADRONS
+                }
                 case "import" -> {
                     System.out.println("Import type (all, ships, squadrons, classes, fleets");
                     switch(scanner.nextLine()) {
@@ -157,13 +157,19 @@ public class Main {
                     }
                 }
                 case "locate" -> {
-                    System.out.println("Locate a (ship, class, fleet):");
+                    System.out.println("Locate a (ship, squadron, class, fleet):");
                     switch(scanner.nextLine()) {
                         default -> System.out.println("Invalid entry.");
                         case "ship" -> {
                             shipHolder = Helper.locateShip();
                             if(shipHolder != null) {
                                 System.out.println("Ship found:\n" + shipHolder.toString());
+                            }
+                        }
+                        case "squadron" -> {
+                            squadronHolder = Helper.locateSquadron();
+                            if(squadronHolder != null) {
+                                System.out.println("Squadron found:\n" + squadronHolder.toString());
                             }
                         }
                         case "class" -> {
@@ -179,41 +185,51 @@ public class Main {
                             }
                         }
                     }
-                } // TODO: IMPLEMENT SQUADRONS
+                }
                 case "list" -> {
-                    System.out.println("List (ships, classes, fleets):");
+                    System.out.println("List (ships, squadrons, classes, fleets):");
                     switch(scanner.nextLine()) {
-                        default -> System.out.println("Invalid entry.");
                         case "ships" -> {
                             System.out.println("List ships by (all, class, nation, meterage):");
                             switch(scanner.nextLine()) {
-                                default -> System.out.println("Invalid entry.");
                                 case "all" -> Helper.listShips();
                                 case "class" -> Helper.listShipsClass();
                                 case "nation" -> Helper.listShipsNation();
                                 case "meterage" -> Helper.listShipsMeterage();
+                                default -> System.out.println("Invalid entry.");
+                            }
+                        }
+                        case "squadrons" -> {
+                            System.out.println("List squadrons by (all, craft classs, nation, size):");
+                            switch(scanner.nextLine()) {
+                                case "all" -> Helper.listSquadrons();
+                                case "craft class" -> Helper.listSquadronsClass();
+                                case "nation" -> Helper.listSquadronsNation();
+                                case "size" -> Helper.listSquadronsSize();
+                                default -> System.out.println("Invalid entry");
                             }
                         }
                         case "classes" -> {
                             System.out.println("List classes by (all, nation, meterage):");
                             switch(scanner.nextLine()) {
-                                default -> System.out.println("Invalid entry.");
                                 case "all" -> Helper.listClasses();
                                 case "nation" -> Helper.listClassesNation();
                                 case "meterage" -> Helper.listClassesMeterage();
+                                default -> System.out.println("Invalid entry.");
                             }
                         }
                         case "fleets" -> {
                             System.out.println("List all fleets by (all, nation, size)");
                             switch(scanner.nextLine()) {
-                                default -> System.out.println("Invalid entry.");
                                 case "all" -> Helper.listFleets();
                                 case "nation" -> Helper.listFleetsNation();
                                 case "size" -> Helper.listFleetsSize();
+                                default -> System.out.println("Invalid entry.");
                             }
                         }
+                        default -> System.out.println("Invalid entry.");
                     }
-                } // TODO: IMPLEMENT SQUADRONS
+                }
                 case "manage fleets" -> {
                     System.out.println("Fleet to manage:");
                     fleetHolder = Helper.locateFleet();
@@ -232,6 +248,7 @@ public class Main {
                         case "composition" -> System.out.println("Composition of fleet:\n" + ships.get(indexHolder).toString());
                     }
                 }
+                default -> System.out.println("Invalid command.");
             }
         } while(true);
     }
