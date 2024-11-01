@@ -60,9 +60,6 @@ public class Helper extends Main {
                         }
                         return shipHolder;
                     }
-                } else {
-                    System.out.println("Class does not exist.");
-                    return null;
                 }
             }
             System.out.println("Class does not exist.");
@@ -239,7 +236,7 @@ public class Helper extends Main {
             return null;
         } else if (holderArray.length == 2) {
             for (int i = 0; i < classes.size(); i++) {
-                if (classes.get(i).getName().equals(tempHolder)) {
+                if (classes.get(i).getName().equals(holderArray[1])) {
                     shipHolder = new Ship(holderArray[0], holderArray[1], classes.get(i).getMeterage(), classes.get(i).getNation());
                 }
             }
@@ -391,7 +388,7 @@ public class Helper extends Main {
         StringBuilder tempHolder_temp = new StringBuilder();
         for(int i = 0; i < squadrons.size(); i++) {
             if(squadrons.get(i).getCraftClass().equals(tempHolder)) {
-                tempHoler_temp.append("\n").append(squadrons.get(i).toString())
+                tempHolder_temp.append("\n").append(squadrons.get(i).toString());
             }
         }
         System.out.println("Listing all squadrons of craft class " + tempHolder + ":\n" + tempHolder_temp.toString());
@@ -427,7 +424,7 @@ public class Helper extends Main {
             tempHolder_temp.append("\n").append(classes.get(i).toString());
         }
         tempHolder = tempHolder_temp.toString();
-        System.out.println("Listing all ships:" + tempHolder);
+        System.out.println("Listing all classes:" + tempHolder);
     }
 
     public static void listClassesNation() {
@@ -494,7 +491,9 @@ public class Helper extends Main {
             case "existing" -> {
                 shipHolder = Helper.locateShip();
                 fleets.get(indexHolder).addShip(shipHolder);
-                System.out.println("Ship added to fleet:\n" + shipHolder.toString() + "\nto " + fleets.get(indexHolder).toStringNoComp());
+                if(shipHolder != null) {
+                    System.out.println("Ship added to fleet:\n" + shipHolder.toString() + "\nto " + fleets.get(indexHolder).toStringNoComp());
+                }
             }
             case "new" -> {
                 shipHolder = Helper.newShip();

@@ -22,11 +22,7 @@ public class Fleet {
     public void addShip(Ship ship) { ships.add(ship); }
 
     public String toString() {
-        String composition = (this.nation + " '" + this.name + "' (" + ships.size() + " Ships):");
-        for(int i = 0; i < ships.size(); i++) {
-            composition = ("\n" + ships.get(i).toString());
-        }
-        return composition;
+        return (this.nation + " '" + this.name + "' (" + ships.size() + " Ships):" + getComposition());
     }
 
     public String toStringFile() {
@@ -46,11 +42,11 @@ public class Fleet {
     public ArrayList<Ship> getCompositionShip() { return this.ships; }
 
     public String getComposition() {
-        String composition = "";
+        StringBuilder composition = new StringBuilder();
         for(int i = 0; i < this.ships.size(); i++) {
-            composition += (this.ships.get(i).toStringFleet() + "\n");
+            composition.append("\n").append(this.ships.get(i).toStringFleet());
         }
-        return composition;
+        return composition.toString();
     }
 
     public String getCompositionFile() {
@@ -67,6 +63,8 @@ public class Fleet {
         Scanner fileFleets = new Scanner(fileNameFleets);
         String tempHolder;
         String[] holderArray;
+        String[] holderArray2;
+        int j = 0;
         String shipClass;
         int meterage;
         String nation;
@@ -76,15 +74,17 @@ public class Fleet {
             holderArray = tempHolder.split("\\|");
             nation = holderArray[0];
             name = holderArray[1];
+            fleets.add(new Fleet(name, nation));
             for(int i = 0; i < Integer.parseInt(holderArray[2]); i++) {
                 tempHolder = fileFleets.nextLine();
-                holderArray = tempHolder.split("\\|");
-                nation = holderArray[0];
-                name= holderArray[1];
-                shipClass = holderArray[2];
-                meterage = Integer.parseInt(holderArray[3]);
-                fleets.get(i).addShip(new Ship(name, shipClass, meterage, nation));
+                holderArray2 = tempHolder.split("\\|");
+                nation = holderArray2[0];
+                name= holderArray2[1];
+                shipClass = holderArray2[2];
+                meterage = Integer.parseInt(holderArray2[3]);
+                fleets.get(j).addShip(new Ship(name, shipClass, meterage, nation));
             }
+            j++;
         }
         fileFleets.close();
         System.out.println("Fleets file imported from / created at:\n" + fileNameFleets.getAbsolutePath());

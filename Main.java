@@ -35,7 +35,7 @@ public class Main {
                         exit -- quit program""");
                 case "exit" -> System.exit(0);
                 case "new" -> {
-                    System.out.println("Create a new (ship, class, fleet):");
+                    System.out.println("Create a new (ship, squadron, class, fleet):");
                     switch(scanner.nextLine()) {
                         default -> System.out.println("Invalid entry.");
                         case "ship" -> {
@@ -245,7 +245,7 @@ public class Main {
                     switch(scanner.nextLine()) {
                         default -> System.out.println("Invalid entry.");
                         case "add ship" -> Helper.addToFleet();
-                        case "composition" -> System.out.println("Composition of fleet:\n" + ships.get(indexHolder).toString());
+                        case "composition" -> System.out.println("Composition of fleet:\n" + fleets.get(indexHolder).toString());
                     }
                 }
                 default -> System.out.println("Invalid command.");
